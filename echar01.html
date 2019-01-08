@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>有图片的柱形图和双列柱形图</title>
+</head>
+<body>
+<div style="width: 810px;margin: 0 auto;margin-top: 50px;">
+    <!--<p style="width: 400px;display: inline-block;text-align: center">图一：堆积图</p>-->
+    <!--<p style="width: 400px;display: inline-block;text-align: center">图二：</p>-->
+    <div id="XmJeDJT" style="width: 400px;height: 300px;display: inline-block;border: 1px solid #ccc;"></div>
+    <div id="ZzZxXSBL" style="width: 400px;height: 300px;display: inline-block;border: 1px solid #ccc;"></div>
+    <div id="circle-image" style="width: 400px;height: 300px;display: inline-block;border: 1px solid #ccc;"></div>
+    <div id="dbe-line-box01" style="width: 400px;height: 300px;display: inline-block;border: 1px solid #ccc;"></div>
+</div>
+
+<script src="js/jquery-1.10.2.min.js"></script>
+<script src="js/echarts.min.js"></script>
+<script >
+    $(function(){
+        //obj_01  obj_02均为测试代码
+        var obj_01={
+            'Axis':['学前','义务','普高','中职','本专科','研究生'],
+            'Ayis':[
+                {'name':'受资助学生','data':[320, 332, 301, 334, 390, 330]},
+                {'name':'在校学生','data':[120, 132, 101, 134, 90, 280]}
+            ]
+        };
+        var obj_02={
+            'Axis':['学前','义务','普高','中职','本专科','研究生'],
+            'Ayis':[
+                {'name':'国家资助','data':[320, 332, 301, 334, 390, 330]},
+                {'name':'地方资助','data':[120, 132, 101, 134, 90, 230]},
+                {'name':'社会资助','data':[120, 132, 101, 134, 90, 230]},
+                {'name':'学校资助','data':[120, 132, 101, 134, 90, 230]}
+            ]
+        };
+        fp_create_echart_01('ZzZxXSBL',obj_01.Axis,obj_01.Ayis);
+        fp_create_echart_02('XmJeDJT',obj_02.Axis,obj_02.Ayis);
+    })
+
+    // 图一：生成echar堆积图
+    function fp_create_echart_02(ID,dataAxis,dataAyis){
+        var XmJeDJT=document.getElementById(ID);
+        var myChart = echarts.init(XmJeDJT);
+        var color=['#516b91','#59c4e6','#edafda','#f5994e'];
+
+        var dataSeries = [];
+        var dataLenged = [];
+        for (var i = 0; i < dataAyis.length; i++) {
+            var item_Temp=new Object();
+            dataLenged.push(dataAyis[i].name);
+            var temp_obj={
+                name:dataAyis[i].name,
+                type:'bar',
+                stack:'资助',
+                itemStyle:{color:color[i]},
+                barWidth:20,
+                barCategoryGap:'70',
+                data:dataAyis[i].data
+            };
+            dataSeries.push(temp_obj);
+        }
+
+        var option={
+            title:{
+                text:'图一：堆积图',
+                left: 'center',
+                textStyle:{
+                    fontSize:14
+                }
+            },
+            tooltip : {
+                trigger: 'axis',
+                axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                    type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            legend: {
+                left:10,
+                top:30,
+                data:dataLenged,
+                textStyle:{
+                    fontSize:12,
+                    lineHeight:20,
+                    padding:[0,0,0,5]
+                },
+                icon:'square',
+                itemWidth:10,
+                itemHeight:10
+            },
+            grid: {
+                left:5,
+                top:55,
+                right:5,
+                bottom:30,
+                width:'calc(100% - 10)'
+            },
+            xAxis :{  // xAxis.axisLine.show显示x轴，axisLine.show默认为true
+                type : 'category',
+                // data : ['学前','义务','普高','中职','本专科','研究生'],
+                data:dataAxis,
+                splitLine:{
+                    show:false
+                },
+                axisTick:{
+                    show:false  //xAxis.axisTick.show控制是否显示坐标轴刻度，默认true
+                },
+                nameTextStyle:{
+                    fontSize:12,
+                    lineHeight:30
+                }
+            },
+            yAxis :{
+                type : 'value',
+                show:true,  //yAxis.show是否显示 y 轴,默认为true
+                splitLine:{
+                    show:false
+                }
+            },
+            series:dataSeries
+        };
+        myChart.setOption(option, true);
+    }
+
+    // 图二：生成echar图
+    function fp_create_echart_01(ID,dataAxis,dataAyis){
+        // <!--斜条纹背景图-->
+        var piePatternSrc = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAANklEQVQYlWPkXvqfAQnAOIzoYkzEKGJgYGBkIkYRzESCipCtxquIgYHhPxMxipBNJOjOAfQMAKUKFcLAh5O1AAAAAElFTkSuQmCC";
+        var piePatternImg = new Image();
+        piePatternImg.src = piePatternSrc;
+        var itemStyle = {
+            normal: {
+                color: {
+                    image: piePatternImg,
+                    repeat: 'repeat'
+                }
+            }
+        };
+        var dataSeries = [];
+        var dataLenged = [];
+        for (var i = 0; i < dataAyis.length; i++) {
+            var item_Temp=new Object();
+            dataLenged.push(dataAyis[i].name);
+            if(i%2==0){
+                item_Temp={color:'#f39800'};
+            }else{
+                item_Temp=itemStyle;
+            }
+            var temp_obj={
+                name:dataAyis[i].name,
+                type:'bar',
+                itemStyle:item_Temp,
+                barWidth:10,
+//                barGap:'100%',
+                data:dataAyis[i].data
+            };
+            dataSeries.push(temp_obj);
+        }
+
+        //第一个bar
+        var ZzZxXSBL=document.getElementById(ID);
+        var myChart = echarts.init(ZzZxXSBL);
+        var option={
+            title:{
+                text:'图二',
+                left: 'center',
+                textStyle:{
+                    fontSize:14
+                }
+            },
+            tooltip : {
+                trigger: 'axis',
+                axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                    type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                },
+                formatter:function(datas){
+                    var res = datas[0].name + '<br/>'
+                    for (var i = 0, length = datas.length; i < length; i++) {
+                        if(datas[i].seriesName=='在校学生'){
+                            res += '<img src="'+piePatternSrc+'" alt="" style="margin-right: 3px;border-radius: 50%">'+datas[i].seriesName + '：'+ datas[i].value + '<br/>'
+                        }else{
+                            res += '<div style="display: inline-block;width: 10px;height: 10px;border-radius:50%;margin-right:3px;background: '+datas[i].color+'"></div>'+datas[i].seriesName + '：'+ datas[i].value + '<br/>'
+                        }
+                    }
+                    return  res
+                }
+            },
+            legend: {
+                left:10,
+                top:30,
+                data:dataLenged,
+                textStyle:{
+                    fontSize:12,
+                    lineHeight:20,
+                    padding:[0,0,0,5]
+                },
+                icon:'square',
+                itemWidth:10,
+                itemHeight:10
+            },
+            grid: {
+                left:5,
+                right:5,
+                top:55,
+                bottom:30,
+                width:'calc(100% - 10)'
+            },
+            xAxis :{
+                type : 'category',
+                // data : ['学前','义务','普高','中职','本专科','研究生'],
+                data:dataAxis,
+                splitLine:{
+                    show:false   //测试
+                },
+                axisLine:{
+                    show:true   // xAxis.axisLine.show显示x轴，axisLine.show默认为true
+                },
+                axisTick:{
+                    show:false
+                },
+                nameTextStyle:{
+                    fontSize:12,
+                    lineHeight:30
+                }
+            },
+            yAxis :{
+                type : 'value',
+                show:false,
+                splitLine:{
+                    show:false
+                }
+            },
+            series:dataSeries
+        };
+        myChart.setOption(option, true);
+    }
+
+</script>
+<script>
+    //图三，环形嵌套图
+    $(function(){
+        //   legendData--图例显示的内容及样式；seriesData--series所需数据
+        var legendData=[
+            {
+                icon:"none",
+                name:"学前",
+                textStyle:{color:"#b3d456"}
+            },
+            {
+                icon:"none",
+                name:"义务",
+                textStyle:{color:"#ff808f"}
+            },
+            {
+                icon:"none",
+                name:"普高",
+                textStyle:{color:"#a68e75"}
+            },
+            {
+                icon:"none",
+                name:"中职",
+                textStyle:{color:"#ce90d3"}
+            },
+            {
+                icon:"none",
+                name:"本专科",
+                textStyle:{color: "#52caec"}
+            },
+            {
+                icon:"none",
+                name:"研究生",
+                textStyle:{color:"#fcb53f"}
+            },
+        ];
+        var color_radius=[
+            {color:'#b3d456',radius:[130, 140]},
+            {color:'#ff808f',radius:[115, 125]},
+            {color:'#a68e75',radius:[100, 110]},
+            {color:'#ce90d3',radius:[85, 95]},
+            {color:'#52caec',radius:[70, 80]},
+            {color:'#fcb53f',radius:[55, 65]}];
+        var seriesData=[
+            {
+                data:[
+                    {
+                        itemStyle: {
+                            emphasis: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)',
+                                normal: {
+                                    color: 'red'
+
+                                }
+                            },
+                            color: color_radius[0].color
+                        },
+                        tooltip:{formatter: "{a} {b} : {c} ({d}%)"},
+                        value:71891
+                    },
+                    {
+                        value:411339,
+                        itemStyle: {
+                            normal: {
+                                color: 'transparent'
+                            }
+                        },
+                        tooltip : {
+                            show:false
+                        }
+                    }
+                ],
+                hoverOffset:2,
+                label:{show: false},
+                name:"学前",
+                radius:[130, 140],
+                center:['50%','55%'],
+                type:"pie"
+            },
+            {
+                data:[
+                    {
+                        itemStyle: {
+                            emphasis: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)',
+                                normal: {
+                                    color: 'red'
+
+                                }
+                            },
+                            color: color_radius[1].color
+                        },
+                        tooltip:{formatter: "{a} {b} : {c} ({d}%)"},
+                        value:270132
+                    },
+                    {
+                        value:213098,
+                        itemStyle: {
+                            normal: {
+                                color: 'transparent'
+                            }
+                        },
+                        tooltip : {
+                            show:false
+                        }
+                    }
+                ],
+                hoverOffset:2,
+                label:{show: false},
+                name:"义务",
+                radius:[115, 125],
+                center:['50%','55%'],
+                type:"pie"
+            },
+            {
+                data:[
+                    {
+                        itemStyle: {
+                            emphasis: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)',
+                                normal: {
+                                    color: 'red'
+
+                                }
+                            },
+                            color: color_radius[2].color
+                        },
+                        tooltip:{formatter: "{a} {b} : {c} ({d}%)"},
+                        value:54850
+                    },
+                    {
+                        value:428380,
+                        itemStyle: {
+                            normal: {
+                                color: 'transparent'
+                            }
+                        },
+                        tooltip : {
+                            show:false
+                        }
+                    }
+                ],
+                hoverOffset:2,
+                label:{show: false},
+                name:"普高",
+                radius:[100, 110],
+                center:['50%','55%'],
+                type:"pie"
+            },
+            {
+                data:[
+                    {
+                        itemStyle: {
+                            emphasis: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)',
+                                normal: {
+                                    color: 'red'
+
+                                }
+                            },
+                            color: color_radius[3].color
+                        },
+                        tooltip:{formatter: "{a} {b} : {c} ({d}%)"},
+                        value:13740
+                    },
+                    {
+                        value:469490,
+                        itemStyle: {
+                            normal: {
+                                color: 'transparent'
+                            }
+                        },
+                        tooltip : {
+                            show:false
+                        }
+                    }
+                ],
+                hoverOffset:2,
+                label:{show: false},
+                name:"中职",
+                radius:[85, 95],
+                center:['50%','55%'],
+                type:"pie"
+            },
+            {
+                data:[
+                    {
+                        itemStyle: {
+                            emphasis: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)',
+                                normal: {
+                                    color: 'red'
+
+                                }
+                            },
+                            color: color_radius[4].color
+                        },
+                        tooltip:{formatter: "{a} {b} : {c} ({d}%)"},
+                        value:71805
+                    },
+                    {
+                        value:411425,
+                        itemStyle: {
+                            normal: {
+                                color: 'transparent'
+                            }
+                        },
+                        tooltip : {
+                            show:false
+                        }
+                    }
+                ],
+                hoverOffset:2,
+                label:{show: false},
+                name:"本专科",
+                radius:[70, 80],
+                center:['50%','55%'],
+                type:"pie"
+            },
+            {
+                data:[
+                    {
+                        itemStyle: {
+                            emphasis: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)',
+                                normal: {
+                                    color: 'red'
+
+                                }
+                            },
+                            color: color_radius[5].color
+                        },
+                        tooltip:{formatter: "{a} {b} : {c} ({d}%)"},
+                        value:283230
+                    },
+                    {
+                        value:200000,
+                        itemStyle: {
+                            normal: {
+                                color: 'transparent'
+                            }
+                        },
+                        tooltip : {
+                            show:false
+                        }
+                    }
+                ],
+                hoverOffset:2,
+                label:{show: false},
+                name:"研究生",
+                radius:[55, 65],
+                type:"pie",
+                center:['50%','55%']
+            }
+        ];
+        fp_create_echart_pie('circle-image',legendData,seriesData);
+    });
+    function fp_create_echart_pie(ID,dataLegend,dataSeries){
+        var myCharts=echarts.init(document.getElementById(ID));
+        var option = {
+            title : {
+                text:'图三：环形嵌套图',
+                left:'center',
+                textStyle:{fontSize:14}
+            },
+            tooltip : {
+                trigger: 'item'
+            },
+            legend: {
+                align:'right',
+                orient: 'vertical',
+                top: "30",
+                left: "20",
+                itemHeight: 10,//图例的高度
+                itemGap:5,//图例之间的间距
+                data: dataLegend
+            },
+            series : dataSeries
+        };
+        // 使用刚指定的配置项和数据显示图表。
+        myCharts.setOption(option);
+    }
+
+</script>
+<script>
+    rd_create_echart_line('dbe-line-box01');
+    function rd_create_echart_line(ID){
+        var myCharts=echarts.init(document.getElementById(ID));
+        var option=option = {
+            title:{
+                text:'图四',
+                textStyle:{
+                    fontSize:14
+                },
+                left:'center'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            grid:{
+                left:10,
+                right:10,
+                top:50,
+                bottom:30
+            },
+            legend: {
+                icon: 'rect',
+                itemWidth: 20,
+                itemHeight: 5,
+                textStyle:{
+                    fontSize:'12px',
+                    height:50,
+                    lineHeight:30
+                },
+                top:25,
+                left:10,
+                bottom:10,
+                itemGap:50,
+                data:['小学','初中','高中']
+            },
+            color:['#ff808f','#fcb53f','#b3d465'], //调色盘颜色列表。如果系列没有设置颜色，则会依次循环从该列表中取颜色作为系列颜色。
+            xAxis: {
+                type: 'category',
+                data:['2016','2017','2018'],
+                axisLine:{
+                    lineStyle:{
+                        color:'#0ba5ff'
+                    }
+                },
+                boundaryGap: ['20%', '20%'],
+                nameTextStyle:{
+                    height:30,
+                    lineHeight:10
+                }
+            },
+            yAxis: {
+                type: 'value',
+                splitLine:{
+                    show:false
+                },
+                axisLine:{
+                    lineStyle:{
+                        color:'#0ba5ff'
+                    }
+                },
+                axisLabel:{
+                    inside:true
+                },
+                axisTick:{
+                    show:false
+                },
+                min:function(value) {
+                    return value.min - 50;
+                }
+            },
+            series: [
+                {
+                    name:'小学',
+                    type:'line',
+                    data:[120, 132, 101]
+                },
+                {
+                    name:'初中',
+                    type:'line',
+                    data:[220, 182, 191]
+                },
+                {
+                    name:'高中',
+                    type:'line',
+                    data:[150, 232, 201]
+                }
+            ]
+        };
+        myCharts.setOption(option);
+    }
+</script>
+</body>
+</html>
