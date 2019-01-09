@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>有图片的柱形图和双列柱形图</title>
+</head>
+<body>
+<div style="width: 1010px;margin: 0 auto;margin-top: 50px;">
+    <div id="myEchart-1" style="width:500px;height:400px;display: inline-block;border: 1px solid #ccc;"></div>
+    <div id="myEchart-2" style="width:500px;height:400px;display: inline-block;border: 1px solid #ccc;"></div>
+</div>
+
+
+<script src="js/jquery-1.10.2.min.js"></script>
+<script src="js/echarts.min.js"></script>
+<script>
+    var data_bs=[87.52,86.31,88.64,85.69];
+     var data_ss=[87.52, 87.06, 88.04,89.16];
+     var data_bk=[88.93, 90.02, 89.48,90.71];
+     var data_gz=[88.14, 86.99, 88.00,87.30];
+     var xAxis_val=['2014', '2015', '2016','2017'];
+     var data_val1=[0,0,0,0,0,0,0];
+    var myChart4 = echarts.init(document.getElementById('myEchart-1'));
+    test_echarts();
+    function test_echarts(){
+        myChart4.setOption ({
+            grid:{
+                left:10,
+                top:'10%',
+                bottom:20,
+                right:40,
+                containLabel:true
+            },
+            tooltip:{
+                show:true,
+                backgroundColor:'#384157',
+                borderColor:'#384157',
+                borderWidth:1,
+                formatter:'{b}:{c}',
+                extraCssText:'box-shadow: 0 0 5px rgba(0, 0, 0, 1)',
+                trigger: 'axis',
+                axisPointer: {
+                type: 'cross',
+                 label: {
+                 backgroundColor: '#6a7985'
+                 }
+                 },
+                formatter: '{a}<br/>{b}: {c1}'
+            },
+            legend:{
+                right:0,
+                top:0,
+                data:['博士研究生','硕士研究生','本科生','高职（专科）生'],
+                textStyle:{
+                    color: ['#00aeff','#0dc741','#ff4d4d','#ffbc3c']
+                }
+            },
+            xAxis: {
+                data: xAxis_val,
+                boundaryGap:false,
+
+                axisLine:{
+                    lineStyle:{
+                        color:"#fff"
+                    }
+                },
+                axisLabel: {
+                    textStyle: {
+                        color: '#fff'
+                    }
+                },
+                axisTick:{
+                    show:false
+                }
+            },
+            yAxis: {
+                ayisLine:{
+                    show:false
+                },
+                name: '(%)',
+                min:86,
+                max:90.1,
+                axisLabel: {
+                    textStyle: {
+                        color: '#fff'
+                    }
+                },
+                splitLine:{
+                    show:false
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: '#fff'
+                    }
+                }
+            },
+
+            series: [
+                {
+                    type: 'line',
+                    name:'博士研究生',
+                    smooth:true,
+                    showSymbol:false,
+                    symbolSize:0,
+                    animation:false,
+                    lineWidth:1.2,
+                    hoverAnimation:false,
+                    data:data_bs,
+                    symbol:'circle',
+                    itemStyle:{
+                        normal:{
+                            color:'#00aeff',
+                            shadowBlur: 40,
+                            label:{
+                                show:true,
+                                position:'top',
+                                textStyle:{
+                                    color:'#00aeff'
+
+                                }
+                            }
+                        }
+                    },
+                    areaStyle:{
+                        normal:{
+                            color:'#00aeff',
+                            opacity:0.08
+                        }
+                    }
+
+                },
+                {
+                    type: 'line',
+                    name:'硕士研究生',
+                    smooth:true,
+                    symbolSize:10,
+                    animation:false,
+                    lineWidth:1.2,
+                    hoverAnimation:false,
+                    data:data_ss,
+                    symbol:'circle',
+                    itemStyle:{
+                        normal:{
+                            color:'#0dc741',
+                            shadowBlur: 40,
+                            label:{
+                                show:true,
+                                position:'top',
+                                textStyle:{
+                                    color:'#0dc741'
+
+                                }
+                            }
+                        }
+                    },
+                    areaStyle:{
+                        normal:{
+                            color:'#0dc741',
+                            opacity:0.08
+                        }
+                    }
+
+                },
+                {
+                    type: 'line',
+                    name:'本科生',
+                    smooth:true,
+                    symbolSize:10,
+                    animation:false,
+                    lineWidth:1.2,
+                    hoverAnimation:false,
+                    data:data_bk,
+                    symbol:'circle',
+                    itemStyle:{
+                        normal:{
+                            color:'#ff4d4d',
+                            shadowBlur: 40,
+                            label:{
+                                show:true,
+                                position:'top',
+                                textStyle:{
+                                    color:'#ff4d4d'
+
+                                }
+                            }
+                        }
+                    },
+                    areaStyle:{
+                        normal:{
+                            color:'#ff4d4d',
+                            opacity:0.08
+                        }
+                    }
+
+                },
+                {
+                    type: 'line',
+                    name:'高职（专科）生',
+                    smooth:true,
+                    symbolSize:10,
+                    animation:false,
+                    lineWidth:1.2,
+                    hoverAnimation:false,
+                    data:data_gz,
+                    symbol:'circle',
+                    itemStyle:{
+                        normal:{
+                            color:'#ffbc3c',
+                            shadowBlur: 40,
+                            label:{
+                                show:true,
+                                position:'top',
+                                textStyle:{
+                                    color:'#ffbc3c'
+                                }
+                            }
+                        }
+                    },
+                    areaStyle:{
+                        normal:{
+                            color:'#ffbc3c',
+                            opacity:0.08
+                        }
+                    }
+
+                }
+            ]
+        })
+    }
+    $(window).resize(function() {
+        myChart4.resize();
+    });
+
+    /*环形图*/
+    var data_obj={
+        type:"pie",
+        title:"学前教育生师比",
+        small_obj:{
+            name:"教师",
+            num:100
+        },
+        big_obj:{
+            name:"学生",
+            num:150
+        }
+    };
+    var myCharts2 = echarts.init(document.getElementById('myEchart-2'));
+    var option2 = {
+        title: {
+            show: false
+        },
+        color: ["#0ba5ff", "#cdcdcd"],
+        tooltip: {
+            trigger: 'item',
+            formatter: "{b} : {c} ({d}%)",
+            // formatter: "{a} <br/>{b} : {c} ({d}%)",
+            position: function (point) {
+                return point
+            }
+        },
+        series: [
+            {
+                // name:'学前教育生师比',
+                type: 'pie',
+                radius: [66, 74],
+                roseType: 'radius',
+                itemStyle: {
+                    normal: {
+                        label: {
+                            show: false,
+                        },
+                        labelLine: {
+                            show: false
+                        },
+                        // borderColor: "#cdcdcd",
+                        borderWidth: 28
+                    },
+                    emphasis: {
+                        borderWidth:28
+                    }
+                },
+                hoverOffset: 1,
+                data: [
+                    {
+                        value: data_obj.small_obj.num,
+                        name: data_obj.small_obj.name,
+                        itemStyle: {
+                            borderColor: "#0ba5ff",
+                        }
+                    },
+                    {
+                        value: data_obj.big_obj.num - data_obj.small_obj.num, name: data_obj.big_obj.num,
+                        itemStyle: {
+                            // borderColor: "#cdcdcd",
+                        }
+                    }
+                ]
+            }
+        ]
+    };
+
+    myCharts2.setOption(option2);
+    $(window).resize(function() {
+        myCharts2.resize();
+    });
+</script>
+</body>
+</html>
